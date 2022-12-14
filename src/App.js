@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import Play from "./components/Play";
+import Score from "./components/Score";
+import Question from "./components/Question";
+import Reaveal from "./components/Reaveal";
+import Trivia from "./components/Trivia";
+
 
 function App() {
+
+const [trivia, setTrivia] = useState(null);
+const [question, setQuestion] = useState("");
+
+const getTrivia = async() =>{
+  try{
+    const url = "https://jservice.io/api/random";
+    const response = await fetch(url);
+    const doc = await response.json()
+    setTrivia(doc[0])
+    console.log(doc, "aaaaaaaaaaaaa")
+  }catch(error){
+    console.log(error);
+  }
+}
+
+console.log( " bbbbbbbbbbbb")
+useEffect(() => {
+  getTrivia()
+}, [])
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Score />
+      <Play trivia={trivia} getTrivia={getTrivia} setQuestion={setQuestion}/>
+      <Question />
+      <Reaveal/>
+      <Trivia />
+
     </div>
   );
 }
